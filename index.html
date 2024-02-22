@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Consulta de Tasa de Cambio</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+
+  #container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease; /* Animación de aparición */
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  header {
+    text-align: center;
+    padding-bottom: 20px;
+    background-color: #fff;
+    animation: slideDown 0.5s ease; /* Animación de deslizamiento hacia abajo */
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  header {
+    text-align: center;
+    padding-bottom: 20px;
+    background-color: #fff; /* Fondo blanco para el encabezado */
+  }
+
+  header img {
+    width: 100px; /* Tamaño del logo */
+    height: auto;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    color: #333;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+  }
+
+  input[type="number"],
+  select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  #resultado {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+  }
+
+  footer {
+    margin-top: 20px;
+    text-align: center;
+    color: #777;
+  }
+
+  /* Media queries para hacer la página responsiva */
+  @media (max-width: 600px) {
+    #container {
+      margin: 10px auto;
+      padding: 10px;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    input[type="number"],
+    select,
+    button {
+      padding: 8px;
+    }
+  }
+
+  button:hover {
+    background-color: #0056b3;
+    transition: background-color 0.3s ease;
+  }
+
+  /* Animación para botones al hacer clic */
+  button:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
+
+</style>
+</head>
+<body>
+
+    <div id="container">
+        <header>
+        <img src="logoancor.png" alt="Logo"> <!-- Agrega la ruta a tu imagen de logo aquí -->
+          <h1>Consulta de Tasa de Cambio</h1>
+        </header>
+        
+        <button onclick="consultarPrecio()">Consultar Precio del Dólar</button>
+      
+        <label for="producto">Seleccione un producto:</label>
+        <select id="producto" onchange="mostrarPrecioPredeterminado()">
+          <option value="1">Producto 1</option>
+          <option value="2">Producto 2</option>
+          <option value="3">Producto 3</option>
+        </select>
+      
+        <label for="precio">Ingrese el precio en dólares:</label>
+        <input type="number" id="precio" placeholder="Ingrese el precio en dólares">
+      
+        <button onclick="realizarConversion()">Realizar Conversión</button>
+      
+        <div id="resultado"></div>
+      
+        <footer>
+          <p>&copy; 2024 Consulta de Tasa de Cambio</p>
+        </footer>
+      </div>
+      
+      <script>
+        function consultarPrecio() {
+          habilitarPrecio();
+          abrirDiarioOficial();
+        }
+      
+        function habilitarPrecio() {
+          document.getElementById('precio').disabled = false;
+        }
+      
+        function abrirDiarioOficial() {
+          window.open('https://www.dof.gob.mx/indicadores.php#gsc.tab=0', '_blank');
+        }
+      
+        function realizarConversion() {
+          var precio = parseFloat(document.getElementById('precio').value);
+      
+          if (isNaN(precio) || precio <= 0) {
+            alert('Por favor, ingrese un precio válido en dólares.');
+            return;
+          }
+      
+          var tasaDeCambio = parseFloat(prompt('Ingresa el valor del dólar en pesos mexicanos'));
+      
+          if (isNaN(tasaDeCambio) || tasaDeCambio <= 0) {
+            alert('Por favor, ingrese un valor válido para el dólar en pesos mexicanos.');
+            return;
+          }
+      
+          var conversion = precio * tasaDeCambio;
+      
+          mostrarResultadoConversion(conversion);
+        }
+      
+        function mostrarPrecioPredeterminado() {
+          var productoSeleccionado = document.getElementById('producto').value;
+          var precioPredeterminado;
+      
+          switch (productoSeleccionado) {
+            case '1':
+              precioPredeterminado = 10; // Precio predeterminado para Producto 1
+              break;
+            case '2':
+              precioPredeterminado = 20; // Precio predeterminado para Producto 2
+              break;
+            case '3':
+              precioPredeterminado = 30; // Precio predeterminado para Producto 3
+              break;
+            default:
+              precioPredeterminado = 0; // Si no se selecciona ningún producto, el precio predeterminado es 0
+              break;
+          }
+      
+          document.getElementById('precio').value = precioPredeterminado;
+        }
+      
+        function mostrarResultadoConversion(conversion) {
+          var resultadoElement = document.getElementById('resultado');
+          resultadoElement.innerHTML = `
+            <p>El precio del producto en pesos mexicanos es: ${conversion}</p>
+          `;
+        }
+      </script>
+      
+      </body>
+      </html>

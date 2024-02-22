@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Probando API de divisas</title>
+    </head>
+    <body>
+        El dólar en la fecha <span id="fecha"></span> (USD) equivale a
+        <strong id="resultado"></strong> MXN
+        <script >
+                const $resultado = document.querySelector("#resultado"),
+                    $fecha = document.querySelector("#fecha");
+
+                fetch("https://api.exchangerate.host/latest?base=USD&symbols=MXN")
+                    .then(respuesta => respuesta.json())
+                    .then(respuestaDecodificada => {
+                        const precioDolarHoyEnMXN = respuestaDecodificada.rates.MXN;
+                        const fechaActualizacion = respuestaDecodificada.date;
+                        $fecha.textContent = fechaActualizacion;
+                        $resultado.textContent = precioDolarHoyEnMXN;
+                    });            
+        </script>
+    </body>
+</html>
